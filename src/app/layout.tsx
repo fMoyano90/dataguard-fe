@@ -17,8 +17,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Data Guard IA",
-  description: "Agente para proteger a microemprendedores de fraude, cláusulas abusivas y riesgos de datos.",
+  title: "Data Guard — Escudo de tus Datos",
+  description: "Analiza contratos y términos y condiciones. Detecta cláusulas abusivas, riesgos y fraudes. Genera cartas para reclamar y proteger tus derechos.",
 };
 
 export default function RootLayout({
