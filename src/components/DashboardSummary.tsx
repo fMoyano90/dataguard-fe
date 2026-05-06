@@ -20,9 +20,9 @@ export function DashboardSummary() {
           key={metric.label}
           transition={{ delay: index * 0.05 + 0.15, duration: 0.3 }}
         >
-          <span className="text-xs font-black uppercase tracking-[0.16em] text-slate-500">{metric.label}</span>
-          <strong className="mt-2 block text-4xl font-black tracking-[-0.06em] text-slate-950">{metric.value}</strong>
-          <small className="mt-1 block text-sm font-bold text-slate-500">{metric.detail}</small>
+          <span className="text-caption uppercase tracking-[0.16em] text-text-tertiary">{metric.label}</span>
+          <strong className="mt-2 block text-4xl font-black tracking-[-0.06em] text-text-primary">{metric.value}</strong>
+          <small className="mt-1 block text-body-sm font-bold text-text-tertiary">{metric.detail}</small>
         </motion.article>
       ))}
     </section>

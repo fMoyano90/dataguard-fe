@@ -13,16 +13,16 @@ export function RegulatorPreview() {
       <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <span className="tag tag-violet">Bonus B2G</span>
-          <h2 className="mt-3 text-2xl font-black tracking-[-0.05em] text-slate-950">Vista regulador</h2>
-          <p className="mt-1 text-sm leading-6 text-slate-600">Casos estructurados sin exponer PII para priorización pública.</p>
+          <h2 className="mt-3 text-2xl font-black tracking-[-0.05em] text-text-primary">Vista regulador</h2>
+          <p className="mt-1 text-body-sm leading-6 text-text-secondary">Casos estructurados sin exponer PII para priorización pública.</p>
         </div>
         <span className="tag tag-ok">PII enmascarada</span>
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[840px] border-separate border-spacing-y-2 text-left text-sm">
+        <table className="w-full min-w-[840px] border-separate border-spacing-y-2 text-left text-body-sm">
           <thead>
-            <tr className="text-xs uppercase tracking-[0.14em] text-slate-500">
+            <tr className="text-caption uppercase tracking-[0.14em] text-text-tertiary">
               <th className="px-3 py-2">Caso</th>
               <th className="px-3 py-2">Escenario</th>
               <th className="px-3 py-2">Entidad</th>
@@ -34,12 +34,12 @@ export function RegulatorPreview() {
           <tbody>
             {rows.map((row) => (
               <tr key={row.id}>
-                <td className="rounded-l-2xl border-y border-l border-slate-200 bg-white px-3 py-4 font-black text-slate-950">{row.id}</td>
-                <td className="border-y border-slate-200 bg-white px-3 py-4 text-slate-700">{row.scenario}</td>
-                <td className="border-y border-slate-200 bg-white px-3 py-4 text-slate-700">{row.entity}</td>
-                <td className="border-y border-slate-200 bg-white px-3 py-4 text-slate-700">{row.source}</td>
-                <td className="border-y border-slate-200 bg-white px-3 py-4"><span className={row.className}>{row.risk}</span></td>
-                <td className="rounded-r-2xl border-y border-r border-slate-200 bg-white px-3 py-4 text-slate-700">{row.action}</td>
+                <td className="rounded-l-2xl border-y border-l border-gray-200 bg-white px-3 py-4 font-mono font-black text-text-primary">{row.id}</td>
+                <td className="border-y border-gray-200 bg-white px-3 py-4 text-gray-700">{row.scenario}</td>
+                <td className="border-y border-gray-200 bg-white px-3 py-4 text-gray-700">{row.entity}</td>
+                <td className="border-y border-gray-200 bg-white px-3 py-4 text-gray-700">{row.source}</td>
+                <td className="border-y border-gray-200 bg-white px-3 py-4"><span className={row.className}>{row.risk}</span></td>
+                <td className="rounded-r-2xl border-y border-r border-gray-200 bg-white px-3 py-4 text-gray-700">{row.action}</td>
               </tr>
             ))}
           </tbody>

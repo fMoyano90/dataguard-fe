@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import type { EntityCheckInput, EntityCheckResult } from "@/lib/types";
+import { Button } from "./Button";
 
 interface EntityVerifierProps {
   onVerify: (input: EntityCheckInput) => Promise<EntityCheckResult>;
@@ -16,7 +17,7 @@ function getMainBadge(result: EntityCheckResult) {
 }
 
 export function EntityVerifier({ onVerify, onVerified }: EntityVerifierProps) {
-  const [name, setName] = useState("Lucas Fácil");
+  const [name, setName] = useState("");
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<EntityCheckResult | null>(null);
@@ -49,15 +50,13 @@ export function EntityVerifier({ onVerify, onVerified }: EntityVerifierProps) {
     <section className="demo-card p-5 sm:p-6" id="entity-verifier">
       <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <span className="tag tag-info">Flujo rápido</span>
-          <h2 className="mt-3 text-2xl font-black tracking-[-0.05em] text-slate-950">Verificar entidad fintech</h2>
-          <p className="mt-1 text-sm leading-6 text-slate-600">Consulta CMF y, si pegas un link, marca riesgo PhishTank.</p>
+          <h2 className="mt-3 text-2xl font-black tracking-[-0.05em] text-text-primary">Verificar entidad fintech</h2>
+          <p className="mt-1 text-body-sm leading-6 text-text-secondary">Consulta CMF y, si pegas un link, marca riesgo PhishTank.</p>
         </div>
-        <span className="tag tag-violet">Objetivo: &lt;3s</span>
       </div>
 
       <form className="grid gap-3" onSubmit={handleSubmit}>
-        <label className="grid gap-2 text-sm font-black text-slate-700">
+        <label className="grid gap-2 text-body-sm font-black text-gray-700">
           Nombre de la app/empresa
           <input
             className="form-field px-4 py-3 font-semibold"
@@ -66,7 +65,7 @@ export function EntityVerifier({ onVerify, onVerified }: EntityVerifierProps) {
             value={name}
           />
         </label>
-        <label className="grid gap-2 text-sm font-black text-slate-700">
+        <label className="grid gap-2 text-body-sm font-black text-gray-700">
           Link sospechoso opcional
           <input
             className="form-field px-4 py-3 font-semibold"
@@ -75,18 +74,18 @@ export function EntityVerifier({ onVerify, onVerified }: EntityVerifierProps) {
             value={url}
           />
         </label>
-        <button className="btn-primary px-5 py-3" disabled={loading} type="submit">
+        <Button disabled={loading} type="submit" variant="primary">
           {loading ? "Verificando..." : "Verificar"}
-        </button>
+        </Button>
       </form>
 
-      {error ? <p className="mt-3 text-sm font-bold text-red-700">{error}</p> : null}
+      {error ? <p className="mt-3 text-body-sm font-bold text-danger-700" role="alert">{error}</p> : null}
 
       <AnimatePresence>
         {result && badge ? (
           <motion.div
             animate={{ opacity: 1, y: 0 }}
-            className="mt-5 rounded-[20px] border border-slate-200 bg-white p-4"
+            className="mt-5 rounded-[20px] border border-gray-200 bg-white p-4"
             exit={{ opacity: 0, y: 6 }}
             initial={{ opacity: 0, y: 8 }}
           >
@@ -100,8 +99,8 @@ export function EntityVerifier({ onVerify, onVerified }: EntityVerifierProps) {
               ) : null}
               {result._mocked ? <span className="tag tag-warn">mock</span> : null}
             </div>
-            <p className="mt-3 text-sm font-semibold leading-6 text-slate-700">{result.evidence ?? result.source}</p>
-            <p className="mt-1 text-xs font-bold text-slate-500">Fuente: {result.source}</p>
+            <p className="mt-3 text-body-sm font-semibold leading-6 text-gray-700">{result.evidence ?? result.source}</p>
+            <p className="mt-1 text-caption font-bold text-text-tertiary">Fuente: {result.source}</p>
           </motion.div>
         ) : null}
       </AnimatePresence>

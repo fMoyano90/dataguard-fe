@@ -1,16 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { checkEntity, checkHealth, runAnalysis } from "@/lib/api";
+import { useRef, useState } from "react";
+import { checkEntity, runAnalysis } from "@/lib/api";
 import { getScenarioFixture } from "@/lib/mockApi";
 import type { AgentName, AnalysisResult, CreateAnalysisInput, EntityCheckResult, Scenario } from "@/lib/types";
 import { AgentTimeline, type AgentStatus } from "./AgentTimeline";
 import { BetoGreeting } from "./BetoGreeting";
 import { CaseInputForm } from "./CaseInputForm";
-import { DashboardSummary } from "./DashboardSummary";
-import { DemoModeBanner } from "./DemoModeBanner";
+
 import { EntityVerifier } from "./EntityVerifier";
-import { RegulatorPreview } from "./RegulatorPreview";
+import { FAQSection } from "./FAQSection";
 import { ResultsPanel } from "./ResultsPanel";
 import { ScenarioCards } from "./ScenarioCards";
 import { Toast } from "./Toast";
@@ -36,7 +35,6 @@ export function BetoDemo() {
   const [lastEntityCheck, setLastEntityCheck] = useState<EntityCheckResult | null>(null);
   const [timelineOpen, setTimelineOpen] = useState(false);
   const [agentStates, setAgentStates] = useState<AgentStateMap>(initialAgentStates);
-  const [backendDown, setBackendDown] = useState(false);
   const [progress, setProgress] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
@@ -45,21 +43,6 @@ export function BetoDemo() {
     setToast(message);
     window.setTimeout(() => setToast(null), 3000);
   }
-
-  useEffect(() => {
-    let cancelled = false;
-
-    checkHealth().then((health) => {
-      if (cancelled) return;
-      const down = Object.values(health).some((status) => status === "down");
-      setBackendDown(down);
-      if (down) showToast("Backend parcial o caído. Fallback offline disponible.");
-    });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   function scrollTo(ref: React.RefObject<HTMLDivElement | null>) {
     ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -118,22 +101,17 @@ export function BetoDemo() {
     }
   }
 
-  const mocked = result?.meta.mocked ?? lastEntityCheck?._mocked ?? process.env.NEXT_PUBLIC_USE_MOCK === "true";
-
   return (
     <main className="mx-auto grid w-full max-w-[1480px] gap-4 px-3 py-4 sm:gap-5 sm:px-6 lg:px-8">
-      <DemoModeBanner backendDown={backendDown} mocked={mocked} />
-      <BetoGreeting onStart={() => scrollTo(verifierRef)} />
-      <DashboardSummary />
-
-      <div ref={verifierRef}>
-        <EntityVerifier onVerified={handleVerified} onVerify={checkEntity} />
-      </div>
-
-      <ScenarioCards onSelect={handleScenarioSelect} selectedScenario={selectedScenario} />
+      <BetoGreeting />
 
       <div ref={formRef}>
-        <CaseInputForm defaultScenario={selectedScenario} disabled={submitting} onSubmit={handleSubmit} />
+        <CaseInputForm
+          defaultScenario={selectedScenario}
+          disabled={submitting}
+          onReset={() => setResult(null)}
+          onSubmit={handleSubmit}
+        />
       </div>
 
       <div ref={resultsRef}>
@@ -145,7 +123,14 @@ export function BetoDemo() {
         />
       </div>
 
-      <RegulatorPreview />
+      <ScenarioCards onSelect={handleScenarioSelect} selectedScenario={selectedScenario} />
+
+      <div ref={verifierRef}>
+        <EntityVerifier onVerified={handleVerified} onVerify={checkEntity} />
+      </div>
+
+      <FAQSection />
+
       <AgentTimeline agentStates={agentStates} open={timelineOpen} progress={progress} />
       <Toast message={toast} />
     </main>

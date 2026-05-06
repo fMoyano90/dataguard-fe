@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import type { Scenario } from "@/lib/types";
+import { HowToModal } from "./HowToModal";
 
 interface ScenarioCardDefinition {
   id: Scenario;
@@ -60,32 +62,52 @@ interface ScenarioCardsProps {
 }
 
 export function ScenarioCards({ selectedScenario, onSelect }: ScenarioCardsProps) {
+  const [howToOpen, setHowToOpen] = useState(false);
+
   return (
-    <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-      {scenarios.map((scenario, index) => {
-        const selected = selectedScenario === scenario.id;
-        return (
-          <motion.button
-            animate={{ opacity: 1, y: 0 }}
-            className={`demo-panel p-5 text-left transition hover:-translate-y-0.5 hover:border-blue-500 ${
-              selected ? "border-blue-500 ring-4 ring-blue-500/10" : ""
-            }`}
-            initial={{ opacity: 0, y: 12 }}
-            key={scenario.id}
-            onClick={() => onSelect(scenario.id, scenario.active)}
-            transition={{ delay: index * 0.06, duration: 0.3 }}
+    <>
+      <section className="demo-card p-5 sm:p-6">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="text-xl font-black tracking-[-0.04em] text-text-primary">Casos de uso</h2>
+            <p className="mt-1 text-body-sm text-text-secondary">Ejemplos reales de lo que el Escudo puede analizar por ti.</p>
+          </div>
+          <button
+            className="shrink-0 rounded-xl border border-primary-500/20 px-4 py-2 text-sm font-bold text-primary-500 hover:bg-primary-500/10"
+            onClick={() => setHowToOpen(true)}
             type="button"
           >
-            <div className="mb-3 flex flex-wrap gap-2">
-              {scenario.tags.map((tag) => (
-                <span className={tag.className} key={tag.label}>{tag.label}</span>
-              ))}
-            </div>
-            <h3 className="text-xl font-black tracking-[-0.05em] text-slate-950">{scenario.title}</h3>
-            <p className="mt-2 text-sm leading-6 text-slate-600">{scenario.description}</p>
-          </motion.button>
-        );
-      })}
-    </section>
+            ¿Cómo usar la app?
+          </button>
+        </div>
+        <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {scenarios.map((scenario, index) => {
+            const selected = selectedScenario === scenario.id;
+            return (
+              <motion.button
+                animate={{ opacity: 1, y: 0 }}
+                className={`demo-panel p-5 text-left transition hover:-translate-y-0.5 hover:border-primary-500 ${
+                  selected ? "border-primary-500 ring-4 ring-primary-500/10" : ""
+                }`}
+                initial={{ opacity: 0, y: 12 }}
+                key={scenario.id}
+                onClick={() => onSelect(scenario.id, scenario.active)}
+                transition={{ delay: index * 0.06, duration: 0.3 }}
+                type="button"
+              >
+                <div className="mb-3 flex flex-wrap gap-2">
+                  {scenario.tags.map((tag) => (
+                    <span className={tag.className} key={tag.label}>{tag.label}</span>
+                  ))}
+                </div>
+                <h3 className="text-h3 text-text-primary">{scenario.title}</h3>
+                <p className="mt-2 text-body-sm leading-6 text-text-secondary">{scenario.description}</p>
+              </motion.button>
+            );
+          })}
+        </div>
+      </section>
+      <HowToModal open={howToOpen} onClose={() => setHowToOpen(false)} />
+    </>
   );
 }

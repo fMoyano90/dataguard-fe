@@ -70,9 +70,18 @@ export interface AnalysisResult {
 export interface CreateAnalysisInput {
   scenario: Scenario;
   text: string;
-  language: "es" | "kreyol" | "quechua" | "en";
+  language: "es" | "en";
   entity: string;
   documentType: "contract" | "tos" | "rental" | "dpa";
+  caseContext?: string;
+}
+
+export interface ExtractDocumentResult {
+  text: string;
+  charCount: number;
+  piiRedacted: boolean;
+  mimetype: string;
+  model: string;
 }
 
 export interface EntityCheckInput {
