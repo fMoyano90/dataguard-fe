@@ -222,7 +222,7 @@ export function CaseInputForm({ defaultScenario, disabled = false, onSubmit, onR
             value={form.caseContext ?? ""}
           />
           {isListening ? (
-            <span className="text-caption font-bold" style={{ color: "var(--color-accent-violet)" }}>Dictando...</span>
+            <span className="text-caption font-bold" style={{ color: "var(--color-accent-violet)" }}>Grabando... Hacé clic en el botón para detener.</span>
           ) : null}
           <button
             aria-pressed={isListening}
@@ -238,7 +238,7 @@ export function CaseInputForm({ defaultScenario, disabled = false, onSubmit, onR
               <line x1="12" x2="12" y1="19" y2="23" />
               <line x1="8" x2="16" y1="23" y2="23" />
             </svg>
-            <span className="uppercase">{isListening ? "Escuchando..." : "Dictar tu caso por voz"}</span>
+            <span className="uppercase">{isListening ? "Detener grabación" : "Dictar tu caso por voz"}</span>
           </button>
         </label>
 
