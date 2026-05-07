@@ -31,10 +31,6 @@ const faqs = [
     q: "¿Qué hago si encuentro una cláusula abusiva?",
     a: "La herramienta te genera cartas modelo para reclamar. Podés copiarlas o descargarlas. También podés presentar un reclamo en SERNAC o en la CMF si corresponde.",
   },
-  {
-    q: "¿Es gratis?",
-    a: "Esta demo es gratuita y de código abierto. Es un proyecto educativo para proteger a consumidores y microemprendedores.",
-  },
 ];
 
 export function FAQSection() {
