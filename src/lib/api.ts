@@ -1,9 +1,10 @@
-import type {
-  AnalysisResult,
-  CreateAnalysisInput,
-  EntityCheckInput,
-  EntityCheckResult,
-  ExtractDocumentResult,
+import {
+  NotAContractError,
+  type AnalysisResult,
+  type CreateAnalysisInput,
+  type EntityCheckInput,
+  type EntityCheckResult,
+  type ExtractDocumentResult,
 } from "./types";
 
 const BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
@@ -35,18 +36,30 @@ export async function runAnalysis(input: CreateAnalysisInput): Promise<AnalysisR
     return runAnalysisMock(input);
   }
 
+  let res: Response;
   try {
-    const res = await fetch(`${BASE}/api/analyses`, {
+    res = await fetch(`${BASE}/api/analyses`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(input),
     });
-    if (!res.ok) throw new Error(`Backend error ${res.status}`);
-    return res.json() as Promise<AnalysisResult>;
   } catch {
     const { runAnalysisMock } = await import("./mockApi");
     return runAnalysisMock(input);
   }
+
+  if (res.ok) return res.json() as Promise<AnalysisResult>;
+
+  const errorBody = await res.json().catch(() => null);
+  if (errorBody && typeof errorBody === "object" && (errorBody as { code?: string }).code === "NOT_A_CONTRACT") {
+    throw new NotAContractError(
+      (errorBody as { message?: string }).message ??
+        "Lo que subiste no corresponde a un contrato o terminos y condiciones.",
+    );
+  }
+
+  const { runAnalysisMock } = await import("./mockApi");
+  return runAnalysisMock(input);
 }
 
 export async function extractDocument(file: File): Promise<ExtractDocumentResult> {

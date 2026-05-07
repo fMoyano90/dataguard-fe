@@ -17,7 +17,7 @@ const faqs = [
   },
   {
     q: "¿Puedo usar esto con un contrato real?",
-    a: "Sí, podés pegar el texto de cualquier contrato, términos y condiciones o acuerdo. La herramienta te mostrará riesgos y sugerencias en lenguaje simple.",
+    a: "Sí, puedes pegar el texto de cualquier contrato, términos y condiciones o acuerdo. La herramienta te mostrará riesgos y sugerencias en lenguaje simple.",
   },
   {
     q: "¿Qué tipos de documentos puedo analizar?",

@@ -177,6 +177,7 @@ export function CaseInputForm({ defaultScenario, disabled = false, hasResult = f
     event.preventDefault();
     onSubmit({
       ...form,
+      entity: form.entity?.trim() || undefined,
       caseContext: form.caseContext?.trim() || undefined,
     });
   }
@@ -309,8 +310,8 @@ export function CaseInputForm({ defaultScenario, disabled = false, hasResult = f
             </select>
           </label>
           <label className="grid gap-2 text-body-sm font-black text-gray-700">
-            Entidad
-            <input className="form-field px-3 py-3" placeholder="Nombre de la entidad o empresa" value={form.entity} onChange={(event) => update("entity", event.target.value)} />
+            Entidad <span className="text-caption font-normal text-text-tertiary">(opcional)</span>
+            <input className="form-field px-3 py-3" placeholder="Si la dejas vacía, la detectamos del texto" value={form.entity ?? ""} onChange={(event) => update("entity", event.target.value)} />
           </label>
           <label className="grid gap-2 text-body-sm font-black text-gray-700">
             Idioma

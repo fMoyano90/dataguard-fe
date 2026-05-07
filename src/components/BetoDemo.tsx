@@ -2,13 +2,14 @@
 
 import { useRef, useState } from "react";
 import { checkEntity, runAnalysis } from "@/lib/api";
-import type { AgentName, AnalysisResult, CreateAnalysisInput, EntityCheckResult, Scenario } from "@/lib/types";
+import { NotAContractError, type AgentName, type AnalysisResult, type CreateAnalysisInput, type EntityCheckResult, type Scenario } from "@/lib/types";
 import { AgentTimeline, type AgentStatus } from "./AgentTimeline";
 import { BetoGreeting } from "./BetoGreeting";
 import { CaseInputForm } from "./CaseInputForm";
 
 import { EntityVerifier } from "./EntityVerifier";
 import { FAQSection } from "./FAQSection";
+import { NotAContractModal } from "./NotAContractModal";
 import { ResultsPanel } from "./ResultsPanel";
 import { ScenarioCards } from "./ScenarioCards";
 import { Toast } from "./Toast";
@@ -37,6 +38,7 @@ export function BetoDemo() {
   const [progress, setProgress] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [notContractError, setNotContractError] = useState<string | null>(null);
 
   function showToast(message: string) {
     setToast(message);
@@ -73,7 +75,14 @@ export function BetoDemo() {
       showToast(response.meta.mocked ? "Análisis listo en modo mock." : "Análisis listo con backend real.");
       window.setTimeout(() => scrollTo(resultsRef), 80);
     } catch (cause) {
-      showToast(cause instanceof Error ? cause.message : "No se pudo ejecutar el análisis.");
+      if (cause instanceof NotAContractError) {
+        setTimelineOpen(false);
+        setAgentStates(initialAgentStates);
+        setProgress(0);
+        setNotContractError(cause.message);
+      } else {
+        showToast(cause instanceof Error ? cause.message : "No se pudo ejecutar el análisis.");
+      }
     } finally {
       setSubmitting(false);
     }
@@ -118,6 +127,11 @@ export function BetoDemo() {
       <FAQSection />
 
       <AgentTimeline agentStates={agentStates} open={timelineOpen} progress={progress} />
+      <NotAContractModal
+        message={notContractError ?? undefined}
+        onClose={() => setNotContractError(null)}
+        open={notContractError !== null}
+      />
       <Toast message={toast} />
     </main>
   );

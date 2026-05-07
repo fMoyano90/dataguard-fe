@@ -71,9 +71,17 @@ export interface CreateAnalysisInput {
   scenario: Scenario;
   text: string;
   language: "es" | "en";
-  entity: string;
+  entity?: string;
   documentType: "contract" | "tos" | "rental" | "dpa";
   caseContext?: string;
+}
+
+export class NotAContractError extends Error {
+  readonly code = "NOT_A_CONTRACT";
+  constructor(message: string) {
+    super(message);
+    this.name = "NotAContractError";
+  }
 }
 
 export interface ExtractDocumentResult {
