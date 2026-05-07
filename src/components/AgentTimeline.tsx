@@ -12,12 +12,19 @@ interface AgentTimelineProps {
 }
 
 const agents: { id: AgentName; name: string; detail: string }[] = [
-  { id: "intake", name: "Intake", detail: "Detecta caso, idioma y datos sensibles." },
-  { id: "regulatory", name: "Regulatory", detail: "Busca leyes y fuentes citables." },
-  { id: "risk", name: "Risk", detail: "Separa lo bueno, lo malo y alertas rojas." },
-  { id: "recommendation", name: "Recommendation", detail: "Prepara pasos y cartas." },
-  { id: "validator", name: "Validator", detail: "Revisa citas y evita afirmaciones inventadas." },
+  { id: "intake", name: "Recepción", detail: "Detecta el tipo de caso, el idioma y los datos sensibles." },
+  { id: "regulatory", name: "Marco legal", detail: "Busca leyes y fuentes que se puedan citar." },
+  { id: "risk", name: "Riesgo", detail: "Separa lo bueno, lo malo y las alertas rojas." },
+  { id: "recommendation", name: "Recomendación", detail: "Prepara los pasos a seguir y las cartas." },
+  { id: "validator", name: "Validador", detail: "Revisa las citas y evita afirmaciones inventadas." },
 ];
+
+const statusLabel: Record<AgentStatus, string> = {
+  idle: "En espera",
+  running: "En curso",
+  done: "Listo",
+  warn: "Aviso",
+};
 
 function dotClass(status: AgentStatus) {
   if (status === "running") return "bg-primary-600 shadow-[0_0_0_7px_color-mix(in_srgb,var(--color-primary-500)_18%,transparent)]";
@@ -44,8 +51,8 @@ export function AgentTimeline({ open, agentStates, progress }: AgentTimelineProp
           initial={{ scale: 0.98, y: 10 }}
           role="status"
         >
-          <h2 className="text-xl font-black tracking-[-0.05em] text-text-primary sm:text-2xl">Analizando con agentes IA</h2>
-          <p className="mt-2 text-body-sm leading-6 text-text-secondary">El orquestador simula trabajo paralelo aunque el backend responda secuencialmente.</p>
+          <h2 className="text-xl font-black tracking-[-0.05em] text-text-primary sm:text-2xl">Analizando con agentes de IA</h2>
+          <p className="mt-2 text-body-sm leading-6 text-text-secondary">Cada agente revisa una parte del caso. Te mostramos el avance en tiempo real.</p>
             <div className="my-5 h-2 overflow-hidden rounded-full bg-gray-200" aria-label={`Progreso ${progress}%`}>
               <div className="h-full rounded-full bg-gradient-to-r from-primary-600 to-success-600 transition-all" style={{ width: `${progress}%` }} />
             </div>
@@ -64,7 +71,7 @@ export function AgentTimeline({ open, agentStates, progress }: AgentTimelineProp
                       <strong className="block text-body-sm text-text-primary">{agent.name}</strong>
                       <span className="block text-caption font-semibold text-text-tertiary">{agent.detail}</span>
                     </div>
-                    <span className="ml-auto shrink-0 text-[10px] font-black uppercase tracking-[0.12em] text-gray-400 sm:text-caption sm:tracking-[0.14em]">{status}</span>
+                    <span className="ml-auto shrink-0 text-[10px] font-black uppercase tracking-[0.12em] text-gray-400 sm:text-caption sm:tracking-[0.14em]">{statusLabel[status]}</span>
                   </div>
                 );
               })}
