@@ -19,6 +19,9 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Data Guard — Escudo de tus Datos",
   description: "Analiza contratos y términos y condiciones. Detecta cláusulas abusivas, riesgos y fraudes. Genera cartas para reclamar y proteger tus derechos.",
+  icons: {
+    icon: "/dataguard_ia_logo_favicon.svg",
+  },
 };
 
 export default function RootLayout({

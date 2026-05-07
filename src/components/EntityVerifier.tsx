@@ -66,7 +66,7 @@ export function EntityVerifier({ onVerify, onVerified }: EntityVerifierProps) {
           />
         </label>
         <label className="grid gap-2 text-body-sm font-black text-gray-700">
-          Link sospechoso opcional
+          Link sospechoso (opcional)
           <input
             className="form-field px-4 py-3 font-semibold"
             onChange={(event) => setUrl(event.target.value)}

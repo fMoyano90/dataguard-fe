@@ -260,7 +260,7 @@ export function CaseInputForm({ defaultScenario, disabled = false, hasResult = f
 
         <label className="grid gap-2 text-body-sm font-black text-gray-700">
           <span className="flex items-center justify-between">
-            <span>Cuentanos sobre tu caso (opcional)</span>
+            <span>Cuentanos sobre tu caso (recomendado)</span>
             <span className="text-caption font-normal text-text-tertiary">{(form.caseContext ?? "").length}/{CASE_CONTEXT_MAX}</span>
           </span>
           <textarea
