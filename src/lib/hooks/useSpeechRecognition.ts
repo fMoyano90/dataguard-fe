@@ -43,6 +43,10 @@ export interface UseSpeechRecognitionResult {
   stop: () => void;
 }
 
+function isAndroidBrowser() {
+  return typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent);
+}
+
 export function useSpeechRecognition({
   lang = "es-CL",
   onTranscript,
@@ -51,8 +55,19 @@ export function useSpeechRecognition({
   const [isSupported, setIsSupported] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
+  const startRef = useRef<(() => void) | null>(null);
+  const shouldListenRef = useRef(false);
+  const restartTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const finalResultIndexesRef = useRef<Set<number>>(new Set());
   const onTranscriptRef = useRef(onTranscript);
   const onErrorRef = useRef(onError);
+
+  const clearRestartTimeout = useCallback(() => {
+    if (restartTimeoutRef.current) {
+      clearTimeout(restartTimeoutRef.current);
+      restartTimeoutRef.current = null;
+    }
+  }, []);
 
   useEffect(() => {
     onTranscriptRef.current = onTranscript;
@@ -62,12 +77,16 @@ export function useSpeechRecognition({
   useEffect(() => {
     if (typeof window === "undefined") return;
     const Ctor = window.SpeechRecognition ?? window.webkitSpeechRecognition;
-    setIsSupported(Boolean(Ctor));
+    const timeout = setTimeout(() => setIsSupported(Boolean(Ctor)), 0);
+    return () => clearTimeout(timeout);
   }, []);
 
   const stop = useCallback(() => {
+    shouldListenRef.current = false;
+    clearRestartTimeout();
     recognitionRef.current?.stop();
-  }, []);
+    setIsListening(false);
+  }, [clearRestartTimeout]);
 
   const start = useCallback(() => {
     if (typeof window === "undefined") return;
@@ -76,18 +95,28 @@ export function useSpeechRecognition({
       onErrorRef.current?.("Tu navegador no soporta dictado por voz. Prueba con Chrome o Edge.");
       return;
     }
+
+    shouldListenRef.current = true;
+    clearRestartTimeout();
     if (recognitionRef.current) {
-      recognitionRef.current.abort();
+      const currentRecognition = recognitionRef.current;
+      recognitionRef.current = null;
+      currentRecognition.abort();
     }
 
     const instance = new Ctor();
     instance.lang = lang;
     instance.continuous = true;
     instance.interimResults = true;
+    finalResultIndexesRef.current.clear();
 
     instance.onresult = (event) => {
       for (let i = event.resultIndex; i < event.results.length; i += 1) {
         const result = event.results[i];
+        if (result.isFinal) {
+          if (finalResultIndexesRef.current.has(i)) continue;
+          finalResultIndexesRef.current.add(i);
+        }
         const alternative = result[0];
         if (!alternative) continue;
         onTranscriptRef.current({
@@ -98,6 +127,7 @@ export function useSpeechRecognition({
     };
 
     instance.onerror = (event) => {
+      if (recognitionRef.current !== instance) return;
       const message =
         event.error === "not-allowed" || event.error === "service-not-allowed"
           ? "Necesitamos permiso para usar el microfono. Habilitalo en tu navegador."
@@ -105,12 +135,25 @@ export function useSpeechRecognition({
             ? "No escuche nada. Acercate al microfono y vuelve a intentar."
             : `No pudimos transcribir el audio (${event.error}).`;
       onErrorRef.current?.(message);
+      shouldListenRef.current = false;
+      clearRestartTimeout();
       setIsListening(false);
     };
 
     instance.onend = () => {
-      setIsListening(false);
+      if (recognitionRef.current !== instance) return;
       recognitionRef.current = null;
+
+      if (shouldListenRef.current && isAndroidBrowser()) {
+        restartTimeoutRef.current = setTimeout(() => {
+          restartTimeoutRef.current = null;
+          if (shouldListenRef.current && !recognitionRef.current) startRef.current?.();
+        }, 250);
+        return;
+      }
+
+      shouldListenRef.current = false;
+      setIsListening(false);
     };
 
     recognitionRef.current = instance;
@@ -119,17 +162,25 @@ export function useSpeechRecognition({
       setIsListening(true);
     } catch (error) {
       onErrorRef.current?.((error as Error).message);
+      shouldListenRef.current = false;
       setIsListening(false);
       recognitionRef.current = null;
     }
-  }, [lang]);
+  }, [clearRestartTimeout, lang]);
+
+  useEffect(() => {
+    startRef.current = start;
+  }, [start]);
 
   useEffect(() => {
     return () => {
-      recognitionRef.current?.abort();
+      shouldListenRef.current = false;
+      clearRestartTimeout();
+      const currentRecognition = recognitionRef.current;
       recognitionRef.current = null;
+      currentRecognition?.abort();
     };
-  }, []);
+  }, [clearRestartTimeout]);
 
   return { isSupported, isListening, start, stop };
 }

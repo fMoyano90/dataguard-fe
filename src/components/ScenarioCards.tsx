@@ -54,8 +54,6 @@ const scenarios: ScenarioCardDefinition[] = [
   },
 ];
 
-interface ScenarioCardsProps {}
-
 export function ScenarioCards() {
   return (
     <section className="demo-card p-4 sm:p-6">

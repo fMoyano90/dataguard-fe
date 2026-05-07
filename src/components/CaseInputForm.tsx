@@ -258,14 +258,15 @@ export function CaseInputForm({ defaultScenario, disabled = false, hasResult = f
           ) : null}
         </div>
 
-        <label className="grid gap-2 text-body-sm font-black text-gray-700">
-          <span className="flex items-center justify-between">
+        <div className="grid gap-2 text-body-sm font-black text-gray-700">
+          <label className="flex items-center justify-between" htmlFor="case-context">
             <span>Cuentanos sobre tu caso (recomendado)</span>
             <span className="text-caption font-normal text-text-tertiary">{(form.caseContext ?? "").length}/{CASE_CONTEXT_MAX}</span>
-          </span>
+          </label>
           <textarea
             className="form-field min-h-44! resize-y px-3 py-3 text-body-sm leading-7 sm:min-h-28!"
             disabled={disabled}
+            id="case-context"
             maxLength={CASE_CONTEXT_MAX}
             onChange={(event) => update("caseContext", event.target.value)}
             placeholder="¿Qué pasó? ¿Qué te preocupa? ¿Qué querés lograr? Ej: 'Mi mamá firmó esto hace 3 meses y ahora le cobran intereses altos.'"
@@ -291,7 +292,7 @@ export function CaseInputForm({ defaultScenario, disabled = false, hasResult = f
             </svg>
             <span className="uppercase">{isListening ? "Detener grabación" : "Dictar tu caso por voz"}</span>
           </button>
-        </label>
+        </div>
 
         {voiceError ? (
           <p className="rounded-2xl bg-danger-50 px-4 py-2 text-caption font-bold text-danger-700" role="alert">{voiceError}</p>
