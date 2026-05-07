@@ -47,10 +47,10 @@ export function EntityVerifier({ onVerify, onVerified }: EntityVerifierProps) {
   const phishing = result?.phishtank;
 
   return (
-    <section className="demo-card p-5 sm:p-6" id="entity-verifier">
-      <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+    <section className="demo-card p-4 sm:p-6" id="entity-verifier">
+      <div className="mb-4 flex flex-col gap-2 sm:mb-5 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h2 className="mt-3 text-2xl font-black tracking-[-0.05em] text-text-primary">Verificar entidad fintech</h2>
+          <h2 className="mt-1 text-xl font-black tracking-[-0.04em] text-text-primary sm:mt-3 sm:text-2xl sm:tracking-[-0.05em]">Verificar entidad fintech</h2>
           <p className="mt-1 text-body-sm leading-6 text-text-secondary">Consulta CMF y, si pegas un link, marca riesgo PhishTank.</p>
         </div>
       </div>
@@ -99,8 +99,8 @@ export function EntityVerifier({ onVerify, onVerified }: EntityVerifierProps) {
               ) : null}
               {result._mocked ? <span className="tag tag-warn">mock</span> : null}
             </div>
-            <p className="mt-3 text-body-sm font-semibold leading-6 text-gray-700">{result.evidence ?? result.source}</p>
-            <p className="mt-1 text-caption font-bold text-text-tertiary">Fuente: {result.source}</p>
+            <p className="break-anywhere mt-3 text-body-sm font-semibold leading-6 text-gray-700">{result.evidence ?? result.source}</p>
+            <p className="break-anywhere mt-1 text-caption font-bold text-text-tertiary">Fuente: {result.source}</p>
           </motion.div>
         ) : null}
       </AnimatePresence>

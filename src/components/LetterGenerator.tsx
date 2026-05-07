@@ -38,19 +38,19 @@ export function LetterGenerator({ letters, onCopied, onDownloaded, onReviewed }:
   }
 
   return (
-    <section className="demo-panel p-5">
+    <section className="demo-panel p-4 sm:p-5">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
         <div>
-          <h3 className="text-xl font-black tracking-[-0.05em] text-text-primary">Cartas generadas</h3>
+          <h3 className="text-lg font-black tracking-[-0.04em] text-text-primary sm:text-xl sm:tracking-[-0.05em]">Cartas generadas</h3>
           <p className="mt-1 text-body-sm text-text-secondary">Borradores revisables antes de enviar.</p>
         </div>
         <span className="tag tag-warn">No reemplaza asesoría legal</span>
       </div>
 
-      <div className="mb-4 flex gap-2 overflow-x-auto rounded-2xl bg-gray-100 p-1" role="tablist">
+      <div className="mb-4 flex gap-1 rounded-2xl bg-gray-100 p-1 sm:gap-2" role="tablist">
         <button
           aria-selected={activeTab === "bank"}
-          className={`rounded-xl px-4 py-2 text-caption font-black ${activeTab === "bank" ? "bg-white text-primary-700 shadow-sm" : "text-text-tertiary"}`}
+          className={`flex-1 rounded-xl px-3 py-2 text-caption font-black sm:flex-initial sm:px-4 ${activeTab === "bank" ? "bg-white text-primary-700 shadow-sm" : "text-text-tertiary"}`}
           disabled={!letters.bank}
           onClick={() => setActiveTab("bank")}
           role="tab"
@@ -60,7 +60,7 @@ export function LetterGenerator({ letters, onCopied, onDownloaded, onReviewed }:
         </button>
         <button
           aria-selected={activeTab === "sernac"}
-          className={`rounded-xl px-4 py-2 text-caption font-black ${activeTab === "sernac" ? "bg-white text-primary-700 shadow-sm" : "text-text-tertiary"}`}
+          className={`flex-1 rounded-xl px-3 py-2 text-caption font-black sm:flex-initial sm:px-4 ${activeTab === "sernac" ? "bg-white text-primary-700 shadow-sm" : "text-text-tertiary"}`}
           disabled={!letters.sernac}
           onClick={() => setActiveTab("sernac")}
           role="tab"
@@ -70,18 +70,18 @@ export function LetterGenerator({ letters, onCopied, onDownloaded, onReviewed }:
         </button>
       </div>
 
-      <pre className="max-h-[420px] overflow-auto whitespace-pre-line rounded-[18px] border border-gray-200 bg-gray-50 p-4 font-mono text-body-sm leading-7 text-gray-700">
+      <pre className="max-h-[60vh] overflow-auto whitespace-pre-wrap break-words rounded-[18px] border border-gray-200 bg-gray-50 p-3 font-mono text-[12px] leading-6 text-gray-700 sm:max-h-[420px] sm:p-4 sm:text-body-sm sm:leading-7">
         {current ?? "Carta no disponible para este escenario."}
       </pre>
 
-      <div className="mt-4 flex flex-col gap-2 sm:flex-row">
-        <Button aria-label="Copiar carta al portapapeles" disabled={!current} onClick={copyLetter} variant="primary">
+      <div className="btn-row mt-4 flex flex-col gap-2 sm:flex-row">
+        <Button aria-label="Copiar carta al portapapeles" className="w-full sm:w-auto" disabled={!current} onClick={copyLetter} variant="primary">
           Copiar
         </Button>
-        <Button aria-label="Descargar carta como archivo de texto" disabled={!current} onClick={downloadLetter} variant="secondary">
+        <Button aria-label="Descargar carta como archivo de texto" className="w-full sm:w-auto" disabled={!current} onClick={downloadLetter} variant="secondary">
           Descargar TXT
         </Button>
-        <Button aria-label="Marcar carta como revisada" onClick={onReviewed} variant="secondary">
+        <Button aria-label="Marcar carta como revisada" className="w-full sm:w-auto" onClick={onReviewed} variant="secondary">
           Marcar como revisado
         </Button>
       </div>

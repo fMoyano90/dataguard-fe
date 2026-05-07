@@ -41,8 +41,8 @@ export function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section className="mx-auto w-full max-w-[1480px] px-3 py-8 sm:px-6 lg:px-8" id="faq">
-      <h2 className="text-2xl font-black tracking-[-0.05em] text-text-primary">Preguntas frecuentes</h2>
+    <section className="py-6 sm:py-8" id="faq">
+      <h2 className="text-xl font-black tracking-[-0.04em] text-text-primary sm:text-2xl sm:tracking-[-0.05em]">Preguntas frecuentes</h2>
       <p className="mt-2 max-w-2xl text-body-sm leading-6 text-text-secondary">
         Lo más consultado antes de usar la herramienta.
       </p>
@@ -53,15 +53,15 @@ export function FAQSection() {
           return (
             <div key={i} className="rounded-[20px] border border-gray-200 bg-white">
               <button
-                className="flex w-full items-center justify-between px-5 py-4 text-left text-body-sm font-bold text-text-primary"
+                className="flex w-full items-center justify-between gap-3 px-4 py-4 text-left text-body-sm font-bold text-text-primary sm:px-5"
                 onClick={() => setOpenIndex(isOpen ? null : i)}
                 type="button"
               >
-                <span>{faq.q}</span>
-                <span className={`ml-4 text-lg transition-transform ${isOpen ? "rotate-45" : ""}`}>+</span>
+                <span className="min-w-0 flex-1">{faq.q}</span>
+                <span className={`shrink-0 text-lg transition-transform ${isOpen ? "rotate-45" : ""}`}>+</span>
               </button>
               {isOpen && (
-                <div className="px-5 pb-4 text-body-sm leading-6 text-text-secondary">{faq.a}</div>
+                <div className="px-4 pb-4 text-body-sm leading-6 text-text-secondary sm:px-5">{faq.a}</div>
               )}
             </div>
           );

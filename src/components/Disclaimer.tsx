@@ -15,7 +15,7 @@ export function Disclaimer({ sources, lastUpdated }: DisclaimerProps) {
   return (
     <aside
       aria-label="Descargo de responsabilidad y fuentes legales"
-      className="rounded-[16px] border border-primary-200 bg-primary-50 p-6"
+      className="rounded-[16px] border border-primary-200 bg-primary-50 p-4 sm:p-6"
     >
       <header className="flex items-center gap-2">
         <span aria-hidden className="text-xl text-primary-600">ℹ️</span>
@@ -31,7 +31,7 @@ export function Disclaimer({ sources, lastUpdated }: DisclaimerProps) {
         <p className="text-caption text-text-tertiary uppercase tracking-wider">
           Fuentes verificadas
         </p>
-        <ul className="mt-2 space-y-1 font-mono text-body-sm text-text-secondary">
+        <ul className="break-anywhere mt-2 space-y-1 font-mono text-body-sm text-text-secondary">
           {sources.map((s) => (
             <li key={`${s.ley}-${s.fecha}`}>
               <span aria-hidden>• </span>

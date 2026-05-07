@@ -22,20 +22,21 @@ export function HowToModal({ open, onClose }: HowToModalProps) {
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
       <motion.div
         animate={{ opacity: 1, scale: 1 }}
-        className="relative z-10 w-full max-w-lg rounded-3xl bg-white p-6 sm:p-8 shadow-2xl"
+        className="relative z-10 max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-3xl bg-white p-5 shadow-2xl sm:p-8"
         exit={{ opacity: 0, scale: 0.95 }}
         initial={{ opacity: 0, scale: 0.95 }}
         onClick={(e) => e.stopPropagation()}
         transition={{ duration: 0.2 }}
       >
         <button
-          className="absolute right-4 top-4 text-text-tertiary hover:text-text-primary"
+          aria-label="Cerrar"
+          className="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full text-text-tertiary hover:bg-gray-100 hover:text-text-primary sm:right-4 sm:top-4"
           onClick={onClose}
           type="button"
         >
           ✕
         </button>
-        <h2 className="text-2xl font-black tracking-[-0.05em] text-text-primary">Cómo usar Data Guard</h2>
+        <h2 className="pr-10 text-xl font-black tracking-[-0.04em] text-text-primary sm:text-2xl sm:tracking-[-0.05em]">Cómo usar Data Guard</h2>
         <p className="mt-2 text-body-sm text-text-secondary">4 pasos simples para proteger tus derechos.</p>
         <ol className="mt-6 space-y-5">
           {steps.map((s) => (

@@ -24,10 +24,10 @@ const DEFAULT_SOURCES = [
 export function ResultsPanel({ result, onCopied, onDownloaded, onReviewed }: ResultsPanelProps) {
   if (!result) {
     return (
-      <section className="demo-card grid min-h-72 place-items-center p-8 text-center" id="results-panel">
+      <section className="demo-card grid min-h-60 place-items-center p-6 text-center sm:min-h-72 sm:p-8" id="results-panel">
         <div>
           <span className="tag tag-info">Resultado vacío</span>
-          <h2 className="mt-4 text-2xl font-black tracking-[-0.05em] text-text-primary">Activa el Escudo arriba</h2>
+          <h2 className="mt-4 text-xl font-black tracking-[-0.04em] text-text-primary sm:text-2xl sm:tracking-[-0.05em]">Activa el Escudo arriba</h2>
           <p className="mt-2 max-w-md text-body-sm leading-6 text-text-secondary">El análisis mostrará riesgo, 3 pilares, plan de acción y cartas generables.</p>
         </div>
       </section>
@@ -35,13 +35,13 @@ export function ResultsPanel({ result, onCopied, onDownloaded, onReviewed }: Res
   }
 
   return (
-    <section className="demo-card grid gap-5 p-5 sm:p-6" id="results-panel">
+    <section className="demo-card grid gap-4 p-4 sm:gap-5 sm:p-6" id="results-panel">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <h2 className="mt-3 text-3xl font-black tracking-[-0.06em] text-text-primary">{result.resultTitle}</h2>
+        <div className="min-w-0">
+          <h2 className="mt-1 text-xl font-black tracking-[-0.04em] text-text-primary sm:mt-3 sm:text-3xl sm:tracking-[-0.06em]">{result.resultTitle}</h2>
           <p className="mt-2 max-w-3xl text-body-sm leading-6 text-text-secondary">{result.resultText}</p>
         </div>
-        <span className="tag tag-info">Zero Storage</span>
+        <span className="tag tag-info self-start">Zero Storage</span>
       </div>
 
       <RiskRing label={result.riskLabel} score={result.riskScore} />

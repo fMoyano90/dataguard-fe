@@ -144,6 +144,8 @@ body {
     linear-gradient(180deg, #f8fbff, var(--background));
   color: var(--foreground);
   font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
 }
 
 button,
@@ -299,6 +301,12 @@ html {
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary-500) 18%, transparent);
 }
 
+/* Long-token wrap (URLs, mono refs) */
+.break-anywhere {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 /* Responsive: ajustes mobile */
 @media (max-width: 720px) {
   :root {
@@ -319,6 +327,13 @@ html {
     text-align: center;
   }
 
+  /* Cuando se anida en filas con .btn-row, no estirar a 100% */
+  .btn-row .btn-primary,
+  .btn-row .btn-secondary,
+  .btn-row .btn-danger {
+    width: auto;
+  }
+
   .form-field,
   select,
   textarea {
@@ -328,5 +343,11 @@ html {
   .tag {
     font-size: 10px;
     padding: 5px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --radius: 16px;
   }
 }

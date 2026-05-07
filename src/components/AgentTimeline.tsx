@@ -32,7 +32,7 @@ export function AgentTimeline({ open, agentStates, progress }: AgentTimelineProp
       {open ? (
         <motion.div
           animate={{ opacity: 1 }}
-          className="fixed inset-0 z-50 grid place-items-center bg-gray-900/45 p-4 backdrop-blur-md"
+          className="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-gray-900/45 p-3 backdrop-blur-md sm:p-4"
           exit={{ opacity: 0 }}
           initial={{ opacity: 0 }}
         >
@@ -53,18 +53,18 @@ export function AgentTimeline({ open, agentStates, progress }: AgentTimelineProp
               {agents.map((agent) => {
                 const status = agentStates[agent.id] ?? "idle";
                 return (
-                  <div className="flex items-center gap-3 rounded-[18px] border border-gray-200 bg-white p-4" key={agent.id}>
+                  <div className="flex items-center gap-3 rounded-[18px] border border-gray-200 bg-white p-3 sm:p-4" key={agent.id}>
                     <motion.span
                       animate={status === "running" ? { scale: [1, 1.16, 1] } : { scale: 1 }}
                       aria-hidden
-                      className={`h-3 w-3 rounded-full ${dotClass(status)}`}
+                      className={`h-3 w-3 shrink-0 rounded-full ${dotClass(status)}`}
                       transition={status === "running" ? { duration: 1, repeat: Infinity } : undefined}
                     />
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <strong className="block text-body-sm text-text-primary">{agent.name}</strong>
                       <span className="block text-caption font-semibold text-text-tertiary">{agent.detail}</span>
                     </div>
-                    <span className="ml-auto text-caption font-black uppercase tracking-[0.14em] text-gray-400">{status}</span>
+                    <span className="ml-auto shrink-0 text-[10px] font-black uppercase tracking-[0.12em] text-gray-400 sm:text-caption sm:tracking-[0.14em]">{status}</span>
                   </div>
                 );
               })}

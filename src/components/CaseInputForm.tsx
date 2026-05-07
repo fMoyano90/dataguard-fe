@@ -5,6 +5,7 @@ import { extractDocument } from "@/lib/api";
 import { useSpeechRecognition, type SpeechLang } from "@/lib/hooks/useSpeechRecognition";
 import type { CreateAnalysisInput, Scenario } from "@/lib/types";
 import { Button } from "./Button";
+import { HowToModal } from "./HowToModal";
 
 const scenarioDefaults: Record<Scenario, CreateAnalysisInput> = {
   credito_trampa: {
@@ -54,11 +55,12 @@ const LANG_TO_SPEECH: Record<CreateAnalysisInput["language"], SpeechLang> = {
 interface CaseInputFormProps {
   defaultScenario: Scenario;
   disabled?: boolean;
+  hasResult?: boolean;
   onSubmit: (input: CreateAnalysisInput) => void;
   onReset?: () => void;
 }
 
-export function CaseInputForm({ defaultScenario, disabled = false, onSubmit, onReset }: CaseInputFormProps) {
+export function CaseInputForm({ defaultScenario, disabled = false, hasResult = false, onSubmit, onReset }: CaseInputFormProps) {
   const [state, setState] = useState({
     scenario: defaultScenario,
     form: scenarioDefaults[defaultScenario],
@@ -71,6 +73,7 @@ export function CaseInputForm({ defaultScenario, disabled = false, onSubmit, onR
     fileName?: string;
   }>({ state: "idle" });
   const [voiceError, setVoiceError] = useState<string | null>(null);
+  const [howToOpen, setHowToOpen] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const baseTextRef = useRef<string>("");
@@ -189,61 +192,36 @@ export function CaseInputForm({ defaultScenario, disabled = false, onSubmit, onR
   }
 
   return (
-    <section className="demo-card p-5 sm:p-6" id="case-input">
-      <div className="mb-5">
-        <h2 className="mt-3 text-2xl font-black tracking-[-0.05em] text-text-primary">Analizar contrato o términos y condiciones</h2>
-        <p className="mt-1 text-body-sm leading-6 text-text-secondary">Pega texto o sube el contrato. En demo no se guarda nada.</p>
+    <section className="demo-card p-4 sm:p-6" id="case-input">
+      <div className="mb-4 flex flex-col gap-3 sm:mb-5 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h2 className="mt-1 text-xl font-black tracking-[-0.04em] text-text-primary sm:mt-3 sm:text-2xl sm:tracking-[-0.05em]">Analizar contrato o términos y condiciones</h2>
+          <p className="mt-1 text-body-sm leading-6 text-text-secondary">Pega texto o sube el contrato. No guardamos nada de tu información.</p>
+        </div>
+        <button
+          className="shrink-0 rounded-xl border border-primary-500/20 px-4 py-2 text-sm font-bold text-primary-500 hover:bg-primary-500/10"
+          onClick={() => setHowToOpen(true)}
+          type="button"
+        >
+          ¿Cómo usar la app?
+        </button>
       </div>
 
       <form className="grid gap-4" onSubmit={handleSubmit}>
         <label className="grid gap-2 text-body-sm font-black text-gray-700">
           <span>Contrato o términos y condiciones</span>
           <textarea
-            className="form-field min-h-40 resize-y px-4 py-3 text-body-sm leading-7"
+            className="form-field min-h-32 resize-y px-3 py-3 text-body-sm leading-7 sm:min-h-40 sm:px-4"
             disabled={disabled}
             maxLength={CASE_TEXT_MAX}
             onChange={(event) => update("text", event.target.value)}
-            placeholder="Pega aqui el contrato o términos y condiciones, o sube un archivo."
+            placeholder="Pega aqui el contrato o términos y condiciones, o sube un archivo abajo."
             value={form.text}
           />
         </label>
 
-        <label className="grid gap-2 text-body-sm font-black text-gray-700">
-          <span className="flex items-center justify-between">
-            <span>Cuentanos sobre tu caso (opcional)</span>
-            <span className="text-caption font-normal text-text-tertiary">{(form.caseContext ?? "").length}/{CASE_CONTEXT_MAX}</span>
-          </span>
-          <textarea
-            className="form-field min-h-32 resize-y px-4 py-3 text-body-sm leading-7 sm:min-h-24"
-            disabled={disabled}
-            maxLength={CASE_CONTEXT_MAX}
-            onChange={(event) => update("caseContext", event.target.value)}
-            placeholder="¿Qué pasó? ¿Qué te preocupa? ¿Qué querés lograr? Ej: 'Mi mamá firmó esto hace 3 meses y ahora le cobran intereses altos.'"
-            value={form.caseContext ?? ""}
-          />
-          {isListening ? (
-            <span className="text-caption font-bold" style={{ color: "var(--color-accent-violet)" }}>Grabando... Hacé clic en el botón para detener.</span>
-          ) : null}
-          <button
-            aria-pressed={isListening}
-            className={`mt-2 inline-flex w-full items-center justify-center gap-2 tag ${isListening ? "tag-violet animate-pulse" : "tag-info"} ${voiceSupported ? "" : "opacity-60"}`}
-            disabled={!voiceSupported || disabled}
-            onClick={toggleListening}
-            title={voiceSupported ? "Dictar tu caso por voz" : "Tu navegador no soporta dictado. Usa Chrome o Edge."}
-            type="button"
-          >
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path d="M12 1a4 4 0 0 0-4 4v7a4 4 0 0 0 8 0V5a4 4 0 0 0-4-4z" />
-              <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-              <line x1="12" x2="12" y1="19" y2="23" />
-              <line x1="8" x2="16" y1="23" y2="23" />
-            </svg>
-            <span className="uppercase">{isListening ? "Detener grabación" : "Dictar tu caso por voz"}</span>
-          </button>
-        </label>
-
         <div
-          className={`rounded-[20px] border-2 border-dashed p-5 text-center transition ${
+          className={`rounded-[20px] border-2 border-dashed p-4 text-center transition sm:p-5 ${
             uploadStatus.state === "error"
               ? "border-danger-300 bg-danger-50"
               : uploadStatus.state === "success"
@@ -280,11 +258,46 @@ export function CaseInputForm({ defaultScenario, disabled = false, onSubmit, onR
           ) : null}
         </div>
 
+        <label className="grid gap-2 text-body-sm font-black text-gray-700">
+          <span className="flex items-center justify-between">
+            <span>Cuentanos sobre tu caso (opcional)</span>
+            <span className="text-caption font-normal text-text-tertiary">{(form.caseContext ?? "").length}/{CASE_CONTEXT_MAX}</span>
+          </span>
+          <textarea
+            className="form-field min-h-44! resize-y px-3 py-3 text-body-sm leading-7 sm:min-h-28!"
+            disabled={disabled}
+            maxLength={CASE_CONTEXT_MAX}
+            onChange={(event) => update("caseContext", event.target.value)}
+            placeholder="¿Qué pasó? ¿Qué te preocupa? ¿Qué querés lograr? Ej: 'Mi mamá firmó esto hace 3 meses y ahora le cobran intereses altos.'"
+            rows={5}
+            value={form.caseContext ?? ""}
+          />
+          {isListening ? (
+            <span className="text-caption font-bold" style={{ color: "var(--color-accent-violet)" }}>Grabando... Hacé clic en el botón para detener.</span>
+          ) : null}
+          <button
+            aria-pressed={isListening}
+            className={`mt-2 inline-flex w-full min-h-[44px] items-center justify-center gap-2 tag ${isListening ? "tag-violet animate-pulse" : "tag-info"} ${voiceSupported ? "" : "opacity-60"}`}
+            disabled={!voiceSupported || disabled}
+            onClick={toggleListening}
+            title={voiceSupported ? "Dictar tu caso por voz" : "Tu navegador no soporta dictado. Usa Chrome o Edge."}
+            type="button"
+          >
+            <svg className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path d="M12 1a4 4 0 0 0-4 4v7a4 4 0 0 0 8 0V5a4 4 0 0 0-4-4z" />
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+              <line x1="12" x2="12" y1="19" y2="23" />
+              <line x1="8" x2="16" y1="23" y2="23" />
+            </svg>
+            <span className="uppercase">{isListening ? "Detener grabación" : "Dictar tu caso por voz"}</span>
+          </button>
+        </label>
+
         {voiceError ? (
           <p className="rounded-2xl bg-danger-50 px-4 py-2 text-caption font-bold text-danger-700" role="alert">{voiceError}</p>
         ) : null}
 
-        <div className="grid gap-3 md:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <label className="grid gap-2 text-body-sm font-black text-gray-700">
             Tipo
             <select className="form-field px-3 py-3" value={form.documentType} onChange={(event) => update("documentType", event.target.value as CreateAnalysisInput["documentType"])}>
@@ -307,15 +320,18 @@ export function CaseInputForm({ defaultScenario, disabled = false, onSubmit, onR
           </label>
         </div>
 
-        <div className="flex gap-3">
-          <Button className="flex-1" disabled={disabled} type="submit" variant="primary">
+        <div className="btn-row flex flex-col gap-3 sm:flex-row">
+          <Button className="w-full sm:flex-1" disabled={disabled} type="submit" variant="primary">
             Activar el Escudo
           </Button>
-          <Button className="px-4" onClick={handleReset} type="button" variant="secondary">
-            Nueva consulta
-          </Button>
+          {hasResult ? (
+            <Button className="w-full sm:w-auto sm:px-4" onClick={handleReset} type="button" variant="secondary">
+              Nueva consulta
+            </Button>
+          ) : null}
         </div>
       </form>
+      <HowToModal open={howToOpen} onClose={() => setHowToOpen(false)} />
     </section>
   );
 }

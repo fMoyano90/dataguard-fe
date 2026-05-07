@@ -102,13 +102,14 @@ export function BetoDemo() {
   }
 
   return (
-    <main className="mx-auto grid w-full max-w-[1480px] gap-4 px-3 py-4 sm:gap-5 sm:px-6 lg:px-8">
+    <main className="mx-auto grid w-full max-w-[1480px] gap-3 px-3 py-3 sm:gap-5 sm:px-6 sm:py-4 lg:px-8">
       <BetoGreeting />
 
       <div ref={formRef}>
         <CaseInputForm
           defaultScenario={selectedScenario}
           disabled={submitting}
+          hasResult={result !== null}
           onReset={() => setResult(null)}
           onSubmit={handleSubmit}
         />

@@ -22,7 +22,7 @@ function PillarCard({ item, tag }: { item: PillarItem; tag: string }) {
       </div>
       <p className="mt-2 text-body-sm leading-6 text-text-secondary">{item.detail}</p>
       {item.citation ? (
-        <a className="tag tag-info mt-3 font-mono" href={item.citation.url} rel="noreferrer" target="_blank">
+        <a className="tag tag-info break-anywhere mt-3 inline-flex max-w-full font-mono leading-tight" href={item.citation.url} rel="noreferrer" target="_blank">
           {item.citation.articulo} - {item.citation.ley}
         </a>
       ) : null}
@@ -36,13 +36,13 @@ export function PillarsPanel({ pillars }: PillarsPanelProps) {
       {pillarConfig.map((config, index) => (
         <motion.div
           animate={{ opacity: 1, y: 0 }}
-          className={`rounded-[24px] border p-4 ${config.className}`}
+          className={`rounded-[24px] border p-3 sm:p-4 ${config.className}`}
           initial={{ opacity: 0, y: 8 }}
           key={config.key}
           transition={{ delay: index * 0.08 }}
         >
-          <h3 className="mb-4 text-xl font-black tracking-[-0.05em] text-text-primary">{config.title}</h3>
-          <div className="grid gap-3">
+          <h3 className="mb-3 text-lg font-black tracking-[-0.04em] text-text-primary sm:mb-4 sm:text-xl sm:tracking-[-0.05em]">{config.title}</h3>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
             {pillars[config.key].map((item) => (
               <PillarCard item={item} key={`${config.key}-${item.title}`} tag={config.tag} />
             ))}
