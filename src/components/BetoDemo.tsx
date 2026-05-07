@@ -2,7 +2,6 @@
 
 import { useRef, useState } from "react";
 import { checkEntity, runAnalysis } from "@/lib/api";
-import { getScenarioFixture } from "@/lib/mockApi";
 import type { AgentName, AnalysisResult, CreateAnalysisInput, EntityCheckResult, Scenario } from "@/lib/types";
 import { AgentTimeline, type AgentStatus } from "./AgentTimeline";
 import { BetoGreeting } from "./BetoGreeting";
@@ -80,19 +79,6 @@ export function BetoDemo() {
     }
   }
 
-  function handleScenarioSelect(scenario: Scenario, active: boolean) {
-    setSelectedScenario(scenario);
-    if (active) {
-      showToast("Escenario activo cargado en el formulario.");
-      window.setTimeout(() => scrollTo(formRef), 60);
-      return;
-    }
-
-    setResult(getScenarioFixture(scenario));
-    showToast("Vista demo precargada.");
-    window.setTimeout(() => scrollTo(resultsRef), 60);
-  }
-
   function handleVerified(entityCheck: EntityCheckResult) {
     setLastEntityCheck(entityCheck);
     if (entityCheck.isImitator) {
@@ -119,12 +105,11 @@ export function BetoDemo() {
         <ResultsPanel
           onCopied={() => showToast("Carta copiada al portapapeles.")}
           onDownloaded={() => showToast("Carta descargada como TXT.")}
-          onReviewed={() => showToast("Marcado como revisado en la demo.")}
           result={result}
         />
       </div>
 
-      <ScenarioCards onSelect={handleScenarioSelect} selectedScenario={selectedScenario} />
+      <ScenarioCards />
 
       <div ref={verifierRef}>
         <EntityVerifier onVerified={handleVerified} onVerify={checkEntity} />

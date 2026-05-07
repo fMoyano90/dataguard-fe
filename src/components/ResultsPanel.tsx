@@ -11,7 +11,6 @@ interface ResultsPanelProps {
   result?: AnalysisResult | null;
   onCopied?: () => void;
   onDownloaded?: () => void;
-  onReviewed?: () => void;
 }
 
 const DEFAULT_SOURCES = [
@@ -21,7 +20,7 @@ const DEFAULT_SOURCES = [
   { ley: "Ley 19.496 / 21.398 — Consumidor (SERNAC)", fecha: "vigente" },
 ];
 
-export function ResultsPanel({ result, onCopied, onDownloaded, onReviewed }: ResultsPanelProps) {
+export function ResultsPanel({ result, onCopied, onDownloaded }: ResultsPanelProps) {
   if (!result) {
     return (
       <section className="demo-card grid min-h-60 place-items-center p-6 text-center sm:min-h-72 sm:p-8" id="results-panel">
@@ -47,7 +46,7 @@ export function ResultsPanel({ result, onCopied, onDownloaded, onReviewed }: Res
       <RiskRing label={result.riskLabel} score={result.riskScore} />
       <PillarsPanel pillars={result.pillars} />
       <PlanList plan={result.plan} />
-      <LetterGenerator letters={result.letters} onCopied={onCopied} onDownloaded={onDownloaded} onReviewed={onReviewed} />
+      <LetterGenerator letters={result.letters} onCopied={onCopied} onDownloaded={onDownloaded} />
       <Disclaimer lastUpdated="6 de mayo 2026" sources={DEFAULT_SOURCES} />
     </section>
   );

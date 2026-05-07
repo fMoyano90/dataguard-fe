@@ -10,12 +10,11 @@ interface LetterGeneratorProps {
   };
   onCopied?: () => void;
   onDownloaded?: () => void;
-  onReviewed?: () => void;
 }
 
 type LetterTab = "bank" | "sernac";
 
-export function LetterGenerator({ letters, onCopied, onDownloaded, onReviewed }: LetterGeneratorProps) {
+export function LetterGenerator({ letters, onCopied, onDownloaded }: LetterGeneratorProps) {
   const [activeTab, setActiveTab] = useState<LetterTab>(letters.bank ? "bank" : "sernac");
   const current = activeTab === "bank" ? letters.bank : letters.sernac;
 
@@ -74,15 +73,12 @@ export function LetterGenerator({ letters, onCopied, onDownloaded, onReviewed }:
         {current ?? "Carta no disponible para este escenario."}
       </pre>
 
-      <div className="btn-row mt-4 flex flex-col gap-2 sm:flex-row">
+      <div className="btn-row mt-4 flex gap-2">
         <Button aria-label="Copiar carta al portapapeles" className="w-full sm:w-auto" disabled={!current} onClick={copyLetter} variant="primary">
           Copiar
         </Button>
         <Button aria-label="Descargar carta como archivo de texto" className="w-full sm:w-auto" disabled={!current} onClick={downloadLetter} variant="secondary">
           Descargar TXT
-        </Button>
-        <Button aria-label="Marcar carta como revisada" className="w-full sm:w-auto" onClick={onReviewed} variant="secondary">
-          Marcar como revisado
         </Button>
       </div>
     </section>

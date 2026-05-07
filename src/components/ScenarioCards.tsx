@@ -54,12 +54,9 @@ const scenarios: ScenarioCardDefinition[] = [
   },
 ];
 
-interface ScenarioCardsProps {
-  selectedScenario?: Scenario;
-  onSelect: (scenario: Scenario, active: boolean) => void;
-}
+interface ScenarioCardsProps {}
 
-export function ScenarioCards({ selectedScenario, onSelect }: ScenarioCardsProps) {
+export function ScenarioCards() {
   return (
     <section className="demo-card p-4 sm:p-6">
       <div>
@@ -67,30 +64,23 @@ export function ScenarioCards({ selectedScenario, onSelect }: ScenarioCardsProps
         <p className="mt-1 text-body-sm text-text-secondary">Ejemplos reales de lo que el Escudo puede analizar por ti.</p>
       </div>
       <div className="mt-4 grid gap-3 sm:mt-5 sm:grid-cols-2 sm:gap-4 xl:grid-cols-4">
-        {scenarios.map((scenario, index) => {
-          const selected = selectedScenario === scenario.id;
-          return (
-            <motion.button
-              animate={{ opacity: 1, y: 0 }}
-              className={`demo-panel p-4 text-left transition hover:-translate-y-0.5 hover:border-primary-500 sm:p-5 ${
-                selected ? "border-primary-500 ring-4 ring-primary-500/10" : ""
-              }`}
-              initial={{ opacity: 0, y: 12 }}
-              key={scenario.id}
-              onClick={() => onSelect(scenario.id, scenario.active)}
-              transition={{ delay: index * 0.06, duration: 0.3 }}
-              type="button"
-            >
-              <div className="mb-3 flex flex-wrap gap-2">
-                {scenario.tags.map((tag) => (
-                  <span className={tag.className} key={tag.label}>{tag.label}</span>
-                ))}
-              </div>
-              <h3 className="text-h3 text-text-primary">{scenario.title}</h3>
-              <p className="mt-2 text-body-sm leading-6 text-text-secondary">{scenario.description}</p>
-            </motion.button>
-          );
-        })}
+        {scenarios.map((scenario, index) => (
+          <motion.div
+            animate={{ opacity: 1, y: 0 }}
+            className="demo-panel p-4 text-left transition sm:p-5"
+            initial={{ opacity: 0, y: 12 }}
+            key={scenario.id}
+            transition={{ delay: index * 0.06, duration: 0.3 }}
+          >
+            <div className="mb-3 flex flex-wrap gap-2">
+              {scenario.tags.map((tag) => (
+                <span className={tag.className} key={tag.label}>{tag.label}</span>
+              ))}
+            </div>
+            <h3 className="text-h3 text-text-primary">{scenario.title}</h3>
+            <p className="mt-2 text-body-sm leading-6 text-text-secondary">{scenario.description}</p>
+          </motion.div>
+        ))}
       </div>
     </section>
   );
