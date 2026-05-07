@@ -97,7 +97,6 @@ export function EntityVerifier({ onVerify, onVerified }: EntityVerifierProps) {
                   PhishTank {phishing.verified ? "verified" : "checked"}
                 </span>
               ) : null}
-              {result._mocked ? <span className="tag tag-warn">mock</span> : null}
             </div>
             <p className="break-anywhere mt-3 text-body-sm font-semibold leading-6 text-gray-700">{result.evidence ?? result.source}</p>
             <p className="break-anywhere mt-1 text-caption font-bold text-text-tertiary">Fuente: {result.source}</p>
